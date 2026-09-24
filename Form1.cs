@@ -43,9 +43,9 @@ namespace StudentCal
 
             for (int i = 0; i < Assignments.Length; i++)
             {
-                if (Assignments[i].IsGraded)
+                if (Assignments[i] is GradedAssignment)
                 {
-                    gradedPoints += Assignments[i].EarnedPoints;
+                    gradedPoints += Assignments[i].GetPointsForCalculation();
                     gradedPossible += Assignments[i].PossiblePoints;
                 }
             }
@@ -77,9 +77,9 @@ namespace StudentCal
 
             for (int i = 0; i < Assignments.Length; i++)
             {
-                if (Assignments[i].IsGraded)
+                if (Assignments[i] is GradedAssignment)
                 {
-                    gradedPoints += Assignments[i].EarnedPoints;
+                    gradedPoints += Assignments[i].GetPointsForCalculation();
                     gradedPossible += Assignments[i].PossiblePoints;
                 }
                 else
@@ -168,58 +168,22 @@ namespace StudentCal
             {
                 assignments = new Assignment[]
                 {
-                    new Assignment
-                    {
-                        Name = "Assignment 1",
-                        PossiblePoints = 100,
-                        EarnedPoints = 90,
-                        IsGraded = true
-                    },
-                    new Assignment
-                    {
-                        Name = "Assignment 2",
-                        PossiblePoints = 100,
-                        EarnedPoints = 85,
-                        IsGraded = true
-                    },
-                    new Assignment
-                    {
-                        Name = "Final Project",
-                        PossiblePoints = 100,
-                        EarnedPoints = 0,
-                        IsGraded = false
-                    }
+            new GradedAssignment("Assignment 1", 100, 90),
+            new GradedAssignment("Assignment 2", 100, 85),
+            new EstimatedAssignment("Final Project", 100, 0)
                 };
             }
             else
             {
                 assignments = new Assignment[]
                 {
-                    new Assignment
-                    {
-                        Name = "Test 1",
-                        PossiblePoints = 100,
-                        EarnedPoints = 80,
-                        IsGraded = true
-                    },
-                    new Assignment
-                    {
-                        Name = "Test 2",
-                        PossiblePoints = 100,
-                        EarnedPoints = 90,
-                        IsGraded = true
-                    },
-                    new Assignment
-                    {
-                        Name = "Final Test",
-                        PossiblePoints = 100,
-                        EarnedPoints = 0,
-                        IsGraded = false
-                    }
+            new GradedAssignment("Test 1", 100, 80),
+            new GradedAssignment("Test 2", 100, 90),
+            new EstimatedAssignment("Final Test", 100, 0)
                 };
             }
 
-            return assignments;
+            return assignments; 
         }
 
         static double CalculateCurrentGrade(double studentInput, double totalPoints)
@@ -276,12 +240,12 @@ namespace StudentCal
 
             foreach (Assignment assignment in Assignments)
             {
-                if (assignment.IsGraded)
+                if (assignment is GradedAssignment)
                 {
                     dgvAssignments.Rows.Add(
                         assignment.Name,
                         assignment.PossiblePoints,
-                        assignment.EarnedPoints,
+                        assignment.GetPointsForCalculation(),
                         "");
                 }
                 else
@@ -318,11 +282,5 @@ namespace StudentCal
         }
     }
 
-    class Assignment
-    {
-        public string Name;
-        public double PossiblePoints;
-        public double EarnedPoints;
-        public bool IsGraded;
-    }
+  
 }
